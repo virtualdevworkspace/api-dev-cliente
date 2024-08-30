@@ -1,17 +1,14 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-  ssl: {
-    rejectUnauthorized: false, // Si necesitas desactivar la verificación de certificados (no recomendado en producción)
-  },
-  
-});
+// Usa la variable DATABASE_URL si está disponible
+const connectionString = process.env.DATABASE_URL;
 
+const pool = new Pool({
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false, // Desactivar la verificación de certificados si es necesario
+  },
+});
 
 module.exports = pool;

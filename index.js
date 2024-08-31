@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const clienteRoutes = require('./routes/clienteRoutes');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+
+
+
 require('dotenv').config();
 
 app.use(express.json());

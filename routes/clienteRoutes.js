@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
+const authenticateApiKey = require('./middlewares/authMiddleware');
 
-router.post('/', clienteController.createCliente);
-router.get('/', clienteController.getClientes);
-router.get('/:id_original', clienteController.getClienteById);
-router.put('/:id_original', clienteController.updateCliente);
-router.delete('/:id_original', clienteController.deleteCliente);
+// Aplicar el middleware a las rutas que deben estar protegidas
+router.post('/', authenticateApiKey, clienteController.createCliente);
+router.get('/', authenticateApiKey, clienteController.getClientes);
+router.get('/:id_original', authenticateApiKey, clienteController.getClienteById);
+router.put('/:id_original', authenticateApiKey, clienteController.updateCliente);
+router.delete('/:id_original', authenticateApiKey, clienteController.deleteCliente);
 
 module.exports = router;

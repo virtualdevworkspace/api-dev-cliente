@@ -7,7 +7,7 @@ const createCliente = async (req, res) => {
       return res.status(400).json({ error: 'El cuerpo de la solicitud debe ser un array de clientes' });
     }
 
-    const result = await createClientes(clientes);
+    const result = await clienteModel.createClientes(clientes);
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

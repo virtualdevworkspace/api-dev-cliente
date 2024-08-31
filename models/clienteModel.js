@@ -35,7 +35,9 @@ const createClientes = async (clientes) => {
       id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso,
+      estado_civil, ingresos, egresos, periodicidad, origen_recursos,
+      instrumento_pago, frecuencia_renovacion, tipo_producto, pago_anticipado
     ) VALUES `;
 
   // Crea un fragmento de la consulta para cada cliente
@@ -44,7 +46,9 @@ const createClientes = async (clientes) => {
       id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso,
+      estado_civil, ingresos, egresos, periodicidad, origen_recursos,
+      instrumento_pago, frecuencia_renovacion, tipo_producto, pago_anticipado
     } = cliente;
 
     // Añade los valores a la lista
@@ -52,11 +56,20 @@ const createClientes = async (clientes) => {
       id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso,
+      estado_civil, ingresos, egresos, periodicidad, origen_recursos,
+      instrumento_pago, frecuencia_renovacion, tipo_producto, pago_anticipado
     );
 
     // Añade un fragmento para cada cliente a la consulta
-    queryText += `($${index * 21 + 1}, $${index * 21 + 2}, $${index * 21 + 3}, $${index * 21 + 4}, $${index * 21 + 5}, $${index * 21 + 6}, $${index * 21 + 7}, $${index * 21 + 8}, $${index * 21 + 9}, $${index * 21 + 10}, $${index * 21 + 11}, $${index * 21 + 12}, $${index * 21 + 13}, $${index * 21 + 14}, $${index * 21 + 15}, $${index * 21 + 16}, $${index * 21 + 17}, $${index * 21 + 18}, $${index * 21 + 19}, $${index * 21 + 20}, $${index * 21 + 21})`;
+    queryText += `($${index * 21 + 1}, $${index * 21 + 2}, $${index * 21 + 3}, 
+    $${index * 21 + 4}, $${index * 21 + 5}, $${index * 21 + 6}, $${index * 21 + 7}, 
+    $${index * 21 + 8}, $${index * 21 + 9}, $${index * 21 + 10}, $${index * 21 + 11},
+     $${index * 21 + 12}, $${index * 21 + 13}, $${index * 21 + 14}, $${index * 21 + 15}, 
+     $${index * 21 + 16}, $${index * 21 + 17}, $${index * 21 + 18}, $${index * 21 + 19}, 
+     $${index * 21 + 20}, $${index * 21 + 21}, $${index * 21 + 22}, $${index * 21 + 23}
+     , $${index * 21 + 24}, $${index * 21 + 25}, $${index * 21 + 26}, $${index * 21 + 27}
+     , $${index * 21 + 28}, $${index * 21 + 29}, $${index * 21 + 30})`;
 
     // Añade una coma para separar los registros, excepto para el último
     if (index < clientes.length - 1) {

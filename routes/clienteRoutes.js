@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
-const authenticateApiKey = require('./middlewares/authMiddleware');
+const authenticateApiKey = require('../middlewares/authMiddleware');
 
 // Aplicar el middleware a las rutas que deben estar protegidas
 router.post('/', authenticateApiKey, clienteController.createCliente);

@@ -35,7 +35,7 @@ const createClientes = async (clientes) => {
       id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso,
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
     ) VALUES `;
 
   // Crea un fragmento de la consulta para cada cliente

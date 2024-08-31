@@ -1,11 +1,33 @@
 const clienteModel = require('../models/clienteModel');
 
+/*
 const createCliente = async (req, res) => {
   try {
     const cliente = await clienteModel.createCliente(req.body);
     res.status(201).json(cliente);
   } catch (error) {
     res.status(500).json({ error: 'Error al crear cliente' });
+  }
+};*/
+
+const createClientes = async (req, res) => {
+  try {
+    // Obtén el arreglo de clientes del cuerpo de la solicitud
+    const clientes = req.body;
+    
+    // Verifica si el cuerpo de la solicitud es un arreglo
+    if (!Array.isArray(clientes)) {
+      return res.status(400).json({ error: 'El cuerpo de la solicitud debe ser un arreglo de clientes' });
+    }
+
+    // Llama al método del modelo que maneja la inserción de múltiples clientes
+    const result = await clienteModel.createClientes(clientes);
+    
+    // Responde con los clientes insertados
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al crear clientes' });
   }
 };
 
@@ -58,7 +80,7 @@ const deleteCliente = async (req, res) => {
 };
 
 module.exports = {
-  createCliente,
+  createClientes,
   getClientes,
   getClienteById,
   updateCliente,

@@ -1,28 +1,34 @@
 const pool = require('../config/db');
 
-const createCliente = async (cliente) => {
-  const {
-    id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
-    genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
-    ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-    ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
-  } = cliente;
-  
-  const result = await pool.query(
-    `INSERT INTO dev_cliente (
-    id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
-    genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
-    ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-    ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
-    RETURNING *`,
-    [ id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
+const createClientes = async (clientes) => {
+  // Verifica si hay clientes en el array
+  if (!clientes.length) {
+    throw new Error('No hay clientes para insertar');
+  }
+
+  // Construye el string de valores para el query
+  const values = clientes.flatMap(cliente => [
+    cliente.id_original, cliente.nombre, cliente.apellido_paterno, cliente.apellido_materno, cliente.rfc, cliente.curp, cliente.fecha_nacimiento,
+    cliente.genero, cliente.nacionalidad, cliente.pais_nacimiento, cliente.estado_nacimiento, cliente.ciudad_nacimiento,
+    cliente.ocupacion, cliente.calle_domicilio, cliente.numero_domicilio, cliente.pais_domicilio, cliente.estado_domicilio,
+    cliente.ciudad_domicilio, cliente.colonia_domicilio, cliente.estatus, cliente.fecha_ingreso
+  ]);
+
+  // Construye la consulta SQL con placeholders
+  const query = `
+    INSERT INTO dev_cliente (
+      id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso]
-  );
-  return result.rows[0];
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+    ) VALUES ${clientes.map((_, i) => `(${i * 21 + 1}, ${i * 21 + 2}, ${i * 21 + 3}, ${i * 21 + 4}, ${i * 21 + 5}, ${i * 21 + 6}, ${i * 21 + 7}, ${i * 21 + 8}, ${i * 21 + 9}, ${i * 21 + 10}, ${i * 21 + 11}, ${i * 21 + 12}, ${i * 21 + 13}, ${i * 21 + 14}, ${i * 21 + 15}, ${i * 21 + 16}, ${i * 21 + 17}, ${i * 21 + 18}, ${i * 21 + 19}, ${i * 21 + 20}, ${i * 21 + 21})`).join(', ')}
+    RETURNING *
+  `;
+
+  const result = await pool.query(query, values);
+  return result.rows;
 };
+
 
 const getClientes = async () => {
   const result = await pool.query('SELECT * FROM dev_cliente');

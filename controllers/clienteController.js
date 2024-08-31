@@ -2,10 +2,16 @@ const clienteModel = require('../models/clienteModel');
 
 const createCliente = async (req, res) => {
   try {
-    const cliente = await clienteModel.createCliente(req.body);
-    res.status(201).json(cliente);
+    const clientes = req.body; // Suponiendo que `req.body` es un array de clientes
+    if (!Array.isArray(clientes)) {
+      return res.status(400).json({ error: 'El cuerpo de la solicitud debe ser un array de clientes' });
+    }
+
+    const result = await createClientes(clientes);
+    res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear cliente' });
+    console.error(error);
+    res.status(500).json({ error: 'Error al insertar clientes' });
   }
 };
 

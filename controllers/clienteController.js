@@ -1,11 +1,19 @@
 const clienteModel = require('../models/clienteModel');
 
+
+
 const createCliente = async (req, res) => {
   try {
-    const cliente = await clienteModel.createCliente(req.body);
-    res.status(201).json(cliente);
+    const clientes = req.body; // Asegúrate de que req.body sea un arreglo de clientes
+    if (!Array.isArray(clientes) || clientes.length === 0) {
+      return res.status(400).json({ error: 'Se espera un arreglo de clientes.' });
+    }
+    
+    const result = await clienteModel.createCliente(clientes);
+    res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear cliente' });
+    console.error(error);
+    res.status(500).json({ error: 'Error al crear clientes' });
   }
 };
 

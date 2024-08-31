@@ -1,27 +1,89 @@
 const pool = require('../config/db');
 
-const createCliente = async (cliente) => {
-  const {
-    id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
-    genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
-    ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-    ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
-  } = cliente;
-  
-  const result = await pool.query(
-    `INSERT INTO dev_cliente (
-    id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
-    genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
-    ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-    ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
-    RETURNING *`,
-    [ id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
+const createCliente = async (clientes) => {
+  // Verificar que 'clientes' sea un array
+  if (!Array.isArray(clientes) || clientes.length === 0) {
+    throw new Error('Debe proporcionar un arreglo de clientes.');
+  }
+
+  // Construir la consulta dinámica para múltiples clientes
+  const queryValues = [];
+  const queryParams = [];
+
+  clientes.forEach((cliente, index) => {
+    const {
+      id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
       genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
       ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
-      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso]
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+    } = cliente;
+
+    queryValues.push(
+      `(${
+        index * 21 + 1
+      }, ${
+        index * 21 + 2
+      }, ${
+        index * 21 + 3
+      }, ${
+        index * 21 + 4
+      }, ${
+        index * 21 + 5
+      }, ${
+        index * 21 + 6
+      }, ${
+        index * 21 + 7
+      }, ${
+        index * 21 + 8
+      }, ${
+        index * 21 + 9
+      }, ${
+        index * 21 + 10
+      }, ${
+        index * 21 + 11
+      }, ${
+        index * 21 + 12
+      }, ${
+        index * 21 + 13
+      }, ${
+        index * 21 + 14
+      }, ${
+        index * 21 + 15
+      }, ${
+        index * 21 + 16
+      }, ${
+        index * 21 + 17
+      }, ${
+        index * 21 + 18
+      }, ${
+        index * 21 + 19
+      }, ${
+        index * 21 + 20
+      }, ${
+        index * 21 + 21
+      })`
+    );
+
+    queryParams.push(
+      id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
+      genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
+      ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+    );
+  });
+
+  const result = await pool.query(
+    `INSERT INTO dev_cliente (
+      id_original, nombre, apellido_paterno, apellido_materno, rfc, curp, fecha_nacimiento,
+      genero, nacionalidad, pais_nacimiento, estado_nacimiento, ciudad_nacimiento,
+      ocupacion, calle_domicilio, numero_domicilio, pais_domicilio, estado_domicilio,
+      ciudad_domicilio, colonia_domicilio, estatus, fecha_ingreso
+    ) VALUES ${queryValues.join(', ')}
+    RETURNING *`,
+    queryParams
   );
-  return result.rows[0];
+
+  return result.rows;
 };
 
 const getClientes = async () => {
